@@ -47,9 +47,12 @@ modalCart.addEventListener('click', function(event) {
 
 //goods
 
-const more = document.querySelector('.more');
-const navigationLink = document.querySelectorAll('.navigation-link');
+const viewAll = document.querySelectorAll('.view-all');
+const navigationLink = document.querySelectorAll('.navigation-link:not(.view-all)');
 const longGoodsList = document.querySelector('.long-goods-list');
+
+const showAcsessories = document.querySelectorAll('.show-acsessories');
+const showClothing = document.querySelectorAll('.show-clothing');
 
 const getGoods = async function () {
 	const result = await fetch('db/db.json');
@@ -86,10 +89,17 @@ const renderCards = function(data) {
 	document.body.classList.add('show-goods')
 };
 
-more.addEventListener('click', function(event) {
+const showAll = function (event) {
 	event.preventDefault();
 	getGoods().then(renderCards);
+};
+
+
+viewAll.forEach(function(elem) {
+	elem.addEventListener('click', showAll);
 });
+
+
 
 const filterCards = function(field, value) {
 	getGoods()
@@ -109,4 +119,19 @@ navigationLink.forEach(function (link) {
 		const value = link.textContent;
 		filterCards(field, value);
 	})
+});
+
+
+showAcsessories.forEach(item => {
+	item.addEventListener('click', event => {
+		event.preventDefault();
+		filterCards('category', 'Accessories');
+	});
+});
+
+showClothing.forEach(item => {
+	item.addEventListener('click', event => {
+		event.preventDefault();
+		filterCards('category', 'Clothing');
+	});
 });
